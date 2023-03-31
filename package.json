@@ -125,6 +125,7 @@
     "build:prod": "cross-env NODE_ENV=production npm run build",
     "build:release": "cross-env BUILD_TAG=release npm run build:prod",
     "prepare-release": "npm-run-all clean build:release && npm run prepare-package-json-for-release",
+    "prepare": "npm-run-all clean build:release && node ./scripts/clean-package-json.js",
     "prepare-package-json-for-release": "node ./scripts/clean-package-json.js",
     "size-limit": "size-limit",
     "verify": "npm-run-all clean -p build:prod check-markdown-links -p lint check-dts-docs tsc-verify test size-limit",
