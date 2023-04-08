@@ -83,4 +83,10 @@ export interface BoxOptions {
 	 * @defaultValue `''`
 	 */
 	title: string;
+	/**
+	 * The timeframe being displayed by the chart.
+	 *
+	 * @defaultValue `0`
+	 */
+	timeframe: number;
 }

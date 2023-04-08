@@ -15,4 +15,5 @@ export const boxOptionsDefaults: BoxOptions = {
 	borderVisible: true,
 	axisLabelVisible: false,
 	title: '',
+	timeframe: 0,
 };

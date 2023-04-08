@@ -317,6 +317,42 @@ export class TimeScale {
 		return index as TimePointIndex;
 	}
 
+	public timeToTrueIndex(time: TimePoint, timeframe: number): TimePointIndex | null {
+		if (this._points.length < 1) {
+			// no time points available
+			return null;
+		}
+
+		const lastTime = this._points[this._points.length - 1].time.timestamp;
+
+		if (time.timestamp > lastTime) {
+			if (timeframe === 0) {
+				return this._points.length - 1 as TimePointIndex;
+			}
+
+			const alignedTime = time.timestamp - (time.timestamp % timeframe);
+			const indexDelta = (alignedTime - lastTime) / timeframe;
+
+			return this._points.length - 1 + indexDelta as TimePointIndex;
+		}
+
+		const index = lowerbound(this._points, time.timestamp, (a: TimeScalePoint, b: UTCTimestamp) => a.time.timestamp < b);
+
+		if (time.timestamp < this._points[index].time.timestamp) {
+			if (timeframe === 0 || index !== 0) { // index !== 0 for going to the next closest TO candle
+				return index as TimePointIndex;
+			}
+
+			const firstTime = this._points[0].time.timestamp;
+			const alignedTime = time.timestamp - (time.timestamp % timeframe);
+			const indexDelta = (firstTime - alignedTime) / timeframe;
+
+			return -indexDelta as TimePointIndex;
+		}
+
+		return index as TimePointIndex;
+	}
+
 	public isEmpty(): boolean {
 		return this._width === 0 || this._points.length === 0 || this._baseIndexOrNull === null;
 	}

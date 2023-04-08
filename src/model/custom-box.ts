@@ -75,7 +75,7 @@ export class CustomBox {
 	public xCoord(time: UTCTimestamp): Coordinate | null {
 		const series = this._series;
 		const timeScale = series.model().timeScale();
-		const timeIndex = timeScale.timeToIndex({ timestamp: time }, true);
+		const timeIndex = timeScale.timeToTrueIndex({ timestamp: time }, this._options.timeframe);
 
 		if (timeScale.isEmpty() || timeIndex === null) {
 			return null;
