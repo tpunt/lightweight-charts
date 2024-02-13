@@ -242,6 +242,38 @@ export class DataLayer<HorzScaleItem> {
 		return this.setSeriesData(series, []);
 	}
 
+	public popSeriesData<TSeriesType extends SeriesType>(series: Series<TSeriesType>, count: number): [SeriesPlotRow<SeriesType>[], DataUpdateResponse] {
+		const seriesData = this._seriesRowsBySeries.get(series);
+		const poppedData: SeriesPlotRow<SeriesType>[] = [];
+
+		if (seriesData === undefined) {
+			const dataUpdateResponse: DataUpdateResponse = {
+				series: new Map(),
+				timeScale: {
+					baseIndex: this._getBaseIndex(),
+				},
+			};
+
+			return [poppedData, dataUpdateResponse];
+		}
+
+		for (let i = 0; i < count && seriesData.length > 0; ++i) {
+			poppedData.push(seriesData.pop() as SeriesPlotRow<SeriesType>);
+		}
+
+		if (seriesData.length === 0) {
+			this._seriesLastTimePoint.delete(series);
+		} else {
+			this._seriesLastTimePoint.set(series, seriesData[seriesData.length - 1].time);
+		}
+
+		const info: SeriesUpdateInfo = {
+			lastBarUpdatedOrNewBarsAddedToTheRight: false,
+		};
+
+		return [poppedData, this._getUpdateResponse(series, seriesData.length - 1, info)];
+	}
+
 	public updateSeriesData<TSeriesType extends SeriesType>(series: Series<TSeriesType>, data: SeriesDataItemTypeMap<HorzScaleItem>[TSeriesType]): DataUpdateResponse {
 		const extendedData = data as SeriesDataItemWithOriginalTime<TSeriesType, HorzScaleItem>;
 		saveOriginalTime(extendedData);

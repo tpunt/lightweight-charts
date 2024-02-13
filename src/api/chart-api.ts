@@ -260,6 +260,16 @@ export class ChartApi<HorzScaleItem> implements IChartApiBase<HorzScaleItem>, Da
 		this._sendUpdateToChart(this._dataLayer.updateSeriesData(series, data));
 	}
 
+	public popData<TSeriesType extends SeriesType>(series: Series<TSeriesType>, count: number): SeriesPlotRow<SeriesType>[] {
+		const [popppedData, update] = this._dataLayer.popSeriesData(series, count);
+
+		if (popppedData.length !== 0) {
+			this._sendUpdateToChart(update);
+		}
+
+		return popppedData;
+	}
+
 	public subscribeClick(handler: MouseEventHandler<HorzScaleItem>): void {
 		this._clickedDelegate.subscribe(handler);
 	}
