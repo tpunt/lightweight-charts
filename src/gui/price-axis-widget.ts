@@ -331,6 +331,10 @@ export class PriceAxisWidget implements IDestroyable {
 		return ensureNotNull(this._size).width;
 	}
 
+	public getHeight(): number {
+		return ensureNotNull(this._size).height;
+	}
+
 	public setPriceScale(priceScale: PriceScale): void {
 		if (this._priceScale === priceScale) {
 			return;

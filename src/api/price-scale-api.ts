@@ -37,6 +37,14 @@ export class PriceScaleApi implements IPriceScaleApi {
 		return this._chartWidget.getPriceAxisWidth(this._priceScaleId);
 	}
 
+	public height(): number {
+		if (!isDefaultPriceScale(this._priceScaleId)) {
+			return 0;
+		}
+
+		return this._chartWidget.getPriceAxisHeight(this._priceScaleId);
+	}
+
 	public setVisibleRange(range: IRange<number>): void {
 		this.setAutoScale(false);
 		this._priceScale().setCustomPriceRange(new PriceRangeImpl(range.from, range.to));

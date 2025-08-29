@@ -25,6 +25,11 @@ export interface IPriceScaleApi {
 	width(): number;
 
 	/**
+	 * Returns a height of the price scale if it's visible or 0 if invisible.
+	 */
+	height(): number;
+
+	/**
 	 * Sets the visible range of the price scale.
 	 *
 	 * @param range - The visible range to set, with `from` and `to` properties.

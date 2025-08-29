@@ -47,6 +47,7 @@ const windowsChrome = isChromiumBased() && isWindows();
 
 export interface IChartWidgetBase {
 	getPriceAxisWidth(position: DefaultPriceScaleId): number;
+	getPriceAxisHeight(position: DefaultPriceScaleId): number;
 	model(): IChartModelBase;
 	paneWidgets(): PaneWidget[];
 	options(): ChartOptionsInternalBase;
@@ -299,6 +300,28 @@ export class ChartWidget<HorzScaleItem> implements IDestroyable, IChartWidgetBas
 			? this._paneWidgets[0].leftPriceAxisWidget()
 			: this._paneWidgets[0].rightPriceAxisWidget();
 		return ensureNotNull(priceAxisWidget).getWidth();
+	}
+
+	public getPriceAxisHeight(position: DefaultPriceScaleId): number {
+		if (position === DefaultPriceScaleId.Left && !this._isLeftAxisVisible()) {
+			return 0;
+		}
+
+		if (position === DefaultPriceScaleId.Right && !this._isRightAxisVisible()) {
+			return 0;
+		}
+
+		if (this._paneWidgets.length === 0) {
+			return 0;
+		}
+
+		// we don't need to worry about exactly pane widget here
+		// because all pane widgets have the same width of price axis widget
+		// see _adjustSizeImpl
+		const priceAxisWidget = position === DefaultPriceScaleId.Left
+			? this._paneWidgets[0].leftPriceAxisWidget()
+			: this._paneWidgets[0].rightPriceAxisWidget();
+		return ensureNotNull(priceAxisWidget).getHeight();
 	}
 
 	public autoSizeActive(): boolean {
